@@ -1,6 +1,24 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
+/// Parses a FASTA file into a vector of sequences.
+///
+/// ## Arguments
+///
+/// * `file` - A `File` object pointing to a FASTA file.
+///
+/// ## Returns
+///
+/// A `Result` containing a `Vec<String>` of sequences on success,
+/// or an `io::Error` on failure.
+///
+/// ## Example
+///
+/// ```rust
+/// use std::fs::File;
+/// let file = File::open("example.fasta").unwrap();
+/// let sequences = parse_fasta(file).unwrap();
+/// ```
 pub(crate) fn parse_fasta(file: File) -> Result<Vec<String>, Error> {
     let reader = BufReader::new(file);
 

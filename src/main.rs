@@ -21,7 +21,7 @@ fn main() -> io::Result<()> {
 }
 
 fn print_vec(v: Vec<String>) {
-    for comp in v {
-        println!("{}", comp);
+    for (i, c) in v.iter().enumerate() {
+        println!("Sequence {}: {}", i + 1, c);
     }
 }
