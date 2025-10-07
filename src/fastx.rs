@@ -18,10 +18,9 @@ use std::io::{BufRead, BufReader, Error};
 ///
 /// ## Example
 ///
-/// ```rust
-/// use std::fs::File;
-/// let file = File::open("example.fasta").unwrap();
-/// let sequences = parse_fasta(file).unwrap();
+/// ```ignore
+/// let file = File::open("example.fasta")?;
+/// let seqs = parse_fasta(file)?;
 /// ```
 pub fn parse_fasta(file: File) -> Result<Vec<String>, Error> {
     let reader = BufReader::new(file);
@@ -52,4 +51,46 @@ pub fn parse_fasta(file: File) -> Result<Vec<String>, Error> {
 
 pub fn parse_fastq(file: File) -> Result<Vec<String>, Error> {
     Ok(Vec::new())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Write;
+    use tempfile::NamedTempFile;
+
+    #[test]
+    fn test_parse_fasta_basic() {
+        // create temp file for testing
+        let mut tmp = NamedTempFile::new().unwrap();
+        writeln!(
+            tmp,
+            ">seq1\nACGTACGT\n>seq2\nTTGGCCAA\n"
+        )
+        .unwrap();
+
+        let file = tmp.reopen().unwrap();
+        let seqs = parse_fasta(file).unwrap();
+
+        assert_eq!(seqs.len(), 2);
+        assert_eq!(seqs[0], "ACGTACGT");
+        assert_eq!(seqs[1], "TTGGCCAA");
+    }
+
+    #[test]
+    fn test_parse_fasta_multiline_sequence() {
+        let mut tmp = NamedTempFile::new().unwrap();
+        writeln!(
+            tmp,
+            ">seq1\nACGT\nACGT\n>seq2\nTTGG\nCCAA\n"
+        )
+        .unwrap();
+
+        let file = tmp.reopen().unwrap();
+        let seqs = parse_fasta(file).unwrap();
+
+        // multi-line sequences should concatenate
+        assert_eq!(seqs[0], "ACGTACGT");
+        assert_eq!(seqs[1], "TTGGCCAA");
+    }
 }
