@@ -1,8 +1,7 @@
 use clap::Parser;
 use std::fs::File;
 use std::io;
-
-use crate::fastx::parse_fasta;
+use fastaq_parser::parse_fasta;
 
 mod fastx;
 

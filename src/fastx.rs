@@ -1,3 +1,7 @@
+//! This crate provides utilities for parsing FASTA and FASTQ files.
+//! 
+//! It includes functions for reading sequences, filtering by quality, and storing results.
+
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
@@ -19,7 +23,7 @@ use std::io::{BufRead, BufReader, Error};
 /// let file = File::open("example.fasta").unwrap();
 /// let sequences = parse_fasta(file).unwrap();
 /// ```
-pub(crate) fn parse_fasta(file: File) -> Result<Vec<String>, Error> {
+pub fn parse_fasta(file: File) -> Result<Vec<String>, Error> {
     let reader = BufReader::new(file);
 
     let mut seqs: Vec<String> = Vec::new();
@@ -44,4 +48,8 @@ pub(crate) fn parse_fasta(file: File) -> Result<Vec<String>, Error> {
     }
 
     Ok(seqs)
+}
+
+pub fn parse_fastq(file: File) -> Result<Vec<String>, Error> {
+    Ok(Vec::new())
 }
