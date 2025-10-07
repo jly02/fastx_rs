@@ -2,9 +2,9 @@ use clap::Parser;
 use std::fs::File;
 use std::io;
 
-use crate::fasta::parse_fasta;
+use crate::fastx::parse_fasta;
 
-mod fasta;
+mod fastx;
 
 #[derive(Parser)]
 struct Args {
